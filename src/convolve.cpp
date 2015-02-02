@@ -1,68 +1,75 @@
-#include <cstdio>
-#include <cstdlib>
-#include <boost/gil/image.hpp>
-#include <boost/gil/typedefs.hpp>
-#include <boost/gil/extension/io/jpeg_io.hpp>
-#include "boost/gil/extension/numeric/kernel.hpp"
-#include "boost/gil/extension/numeric/convolve.hpp"
+#include <iostream>
+#include <string>
+#include <boost/program_options/options_description.hpp>
+#include <boost/program_options/positional_options.hpp>
+#include <boost/program_options/variables_map.hpp>
+#include <boost/program_options/parsers.hpp>
+#include <laplacian/version.hpp>
+#include <laplacian/convolve.hpp>
+#include <laplacian/numeric.hpp>
 
-int main() {
+#define usage() \
+    std::cerr << "Usage: " << argv[0] << " [options] input output" << std::endl << std::endl; \
+    std::cerr << "Options: " << std::endl; \
+    std::cerr << opts << std::endl; \
+    return 0; \
 
-    using namespace boost::gil;
 
-    rgb8_image_t img;
-    jpeg_read_image("test.jpg",img);
+namespace po = boost::program_options;
 
-    // Convolve the rows and the columns of the image with a fixed kernel
-    rgb8_image_t convolved(img);
+int main(int argc, char* argv[]) {
 
-    // radius-1 Gaussian kernel, size 9
-    float gaussian_1[]={0.00022923296f,0.0059770769f,0.060597949f,0.24173197f,0.38292751f,
-                        0.24173197f,0.060597949f,0.0059770769f,0.00022923296f};
-    /*
-    // radius-2 Gaussian kernel, size 15
-    float gaussian_2[]={
-        0.00048869418f,0.0024031631f,0.0092463447f,
-        0.027839607f,0.065602221f,0.12099898f,0.17469721f,
-        0.19744757f,
-        0.17469721f,0.12099898f,0.065602221f,0.027839607f,
-        0.0092463447f,0.0024031631f,0.00048869418f
-    };
-    //radius-3 Gaussian kernel, size 23
-    float gaussian_3[]={
-        0.00016944126f,0.00053842377f,0.0015324751f,0.0039068931f,
-        0.0089216027f,0.018248675f,0.033434924f,0.054872241f,
-        0.080666073f,0.10622258f,0.12529446f,
-        0.13238440f,
-        0.12529446f,0.10622258f,0.080666073f,
-        0.054872241f,0.033434924f,0.018248675f,0.0089216027f,
-        0.0039068931f,0.0015324751f,0.00053842377f,0.00016944126f
-    };
-    //radius-4 Gaussian kernel, size 29
-    float gaussian_4[]={
-        0.00022466264f,0.00052009715f,0.0011314391f,0.0023129794f,
-        0.0044433107f,0.0080211498f,0.013606987f,0.021691186f,
-        0.032493830f,0.045742013f,0.060509924f,0.075220309f,
-        0.087870099f,0.096459411f,0.099505201f,0.096459411f,0.087870099f,
-        0.075220309f,0.060509924f,0.045742013f,0.032493830f,
-        0.021691186f,0.013606987f,0.0080211498f,0.0044433107f,
-        0.0023129794f,0.0011314391f,0.00052009715f,0.00022466264f,
-    };
-    */
+    po::variables_map vm;
 
-    kernel_1d_fixed<float,9> kernel(gaussian_1,4);
+    po::options_description opts;
+    opts.add_options()
+        ("help", "produce this help message")
+        ("version", "print version information")
+        ("input",  po::value<std::string>(), "input file")
+        ("output", po::value<std::string>(), "output file")
+        ;
 
-    convolve_rows_fixed<rgb32f_pixel_t>(const_view(convolved),kernel,view(convolved));
-    convolve_cols_fixed<rgb32f_pixel_t>(const_view(convolved),kernel,view(convolved));
-    jpeg_write_view("out-convolution.jpg", view(convolved));
+    po::positional_options_description positional_opts;
+    positional_opts.add("input", 1);
+    positional_opts.add("output",  2);
+    po::store(po::command_line_parser(argc, argv).options(opts).positional(positional_opts).run(), vm);
 
-    // This is how to use a resizable kernel
-    kernel_1d<float> kernel2(gaussian_1,9,4);
-    convolve_rows<rgb32f_pixel_t>(const_view(img),kernel2,view(img));
-    convolve_cols<rgb32f_pixel_t>(const_view(img),kernel2,view(img));
-    jpeg_write_view("out-convolution2.jpg", view(img));
+    try {
+        po::notify(vm);
+    } catch (std::exception &e) {
+        std::cerr << "Error: " << e.what() << std::endl;
+        usage();
+    }
 
-    
-    return 0;
 
+    if (vm.count("help")){
+        usage();
+    }
+
+    if (vm.count("version")) {
+        std::cerr << std::endl;
+        laplacian::print_version_info(std::cerr);
+        std::cerr << std::endl;
+        return 0;
+    }
+
+    if (vm.count("input")) {
+
+        const std::string input(vm["input"].as<std::string>());
+        std::string output;
+        if (vm.count("output")) {
+            output = vm["output"].as<std::string>();
+        } else {
+            output = "output_" + vm["input"].as<std::string>();
+            std::cerr << "Using " << output << " as the output file." << std::endl;
+        }
+
+        laplacian::GaussianConvolve<laplacian::Gaussian1> smoother;
+
+        smoother.convolve(input, output);
+
+    } else {
+        std::cerr << "Missing input file" << std::endl;
+        usage();
+    }
 }
