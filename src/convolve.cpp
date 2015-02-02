@@ -7,6 +7,7 @@
 #include <laplacian/version.hpp>
 #include <laplacian/convolve.hpp>
 #include <laplacian/numeric/gaussian.hpp>
+#include <laplacian/laplacian.hpp>
 
 #define usage() \
     std::cerr << "Usage: " << argv[0] << " [options] input output" << std::endl << std::endl; \
