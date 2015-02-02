@@ -1,4 +1,4 @@
-namespace laplacian {
+namespace laplacian { namespace numeric {
 
     // Radius-1 Gaussian Kernel
     struct Gaussian1 {
@@ -62,5 +62,5 @@ namespace laplacian {
         0.075220309f,   0.060509924f,   0.045742013f,   0.032493830f,
         0.021691186f,   0.013606987f,   0.0080211498f,  0.0044433107f,
         0.0023129794f,  0.0011314391f,  0.00052009715f, 0.00022466264f };
-}
+} }
 

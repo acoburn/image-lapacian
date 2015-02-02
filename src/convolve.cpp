@@ -6,7 +6,7 @@
 #include <boost/program_options/parsers.hpp>
 #include <laplacian/version.hpp>
 #include <laplacian/convolve.hpp>
-#include <laplacian/numeric.hpp>
+#include <laplacian/numeric/gaussian.hpp>
 
 #define usage() \
     std::cerr << "Usage: " << argv[0] << " [options] input output" << std::endl << std::endl; \
@@ -64,7 +64,7 @@ int main(int argc, char* argv[]) {
             std::cerr << "Using " << output << " as the output file." << std::endl;
         }
 
-        laplacian::GaussianConvolve<laplacian::Gaussian1> smoother;
+        laplacian::GaussianConvolve<laplacian::numeric::Gaussian1> smoother;
 
         smoother.convolve(input, output);
 
