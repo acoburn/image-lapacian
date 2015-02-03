@@ -31,7 +31,7 @@ namespace laplacian {
             boost::gil::jpeg_write_view(output, boost::gil::view(convolved));
         }
 
-    }; // Gaussian
+    }; // GaussianConvolve
 
 } // laplacian
 
