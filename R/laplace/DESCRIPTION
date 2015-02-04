@@ -1,0 +1,9 @@
+Package: laplace
+Type: Package
+Title: Compute a laplace distribution for a vector
+Version: 1.0
+Date: 2015-02-03
+Author: Aaron Coburn <acoburn@amherst.edu>
+Maintainer: Aaron Coburn <acoburn@amherst.edu>
+Description: Compute a laplace distribution for a vector of values
+License: Apache License 2.0
