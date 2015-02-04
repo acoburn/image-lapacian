@@ -5,7 +5,7 @@
     A distribution function for the laplace distribution with mean equal to mean and the scaling factor equal to b.
 }
 \usage{
-laplace(x, mean = 0, b = 1)
+dlaplace(x, mean = 0, b = 1)
 }
 \arguments{
   \item{x}{
