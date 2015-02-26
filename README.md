@@ -1,5 +1,7 @@
 #README
 
+[![Build Status](https://travis-ci.org/acoburn/image-laplacian.png?branch=master)](https://travis-ci.org/acoburn/image-laplacian)
+
  1.) Prerequisites
  2.) Building
  3.) Installing
