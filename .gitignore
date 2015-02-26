@@ -1,5 +1,3 @@
-build/
-bin/
 R/laplace*.tar.gz
 
 # Compiled Object files
