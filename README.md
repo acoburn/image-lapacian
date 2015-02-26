@@ -3,7 +3,6 @@
  1.) Prerequisites
  2.) Building
  3.) Installing
- 4.) Contributing
  
 ##1. PREREQUISITES
 
@@ -28,6 +27,5 @@
 
  Once the project has been built (see "BUILDING"), execute "sudo make install".
 
-##4. CONTRIBUTING
 
  TODO: Enhance section.
