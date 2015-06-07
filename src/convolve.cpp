@@ -14,15 +14,24 @@
     std::cerr << "Usage: " << argv[0] << " [options] input output" << std::endl << std::endl; \
     std::cerr << "Options: " << std::endl; \
     std::cerr << opts << std::endl; \
-    return 0; \
 
 
 namespace po = boost::program_options;
 
 template<typename T>
-void convolve(const std::string& input, const std::string& output) {
-    laplacian::GaussianConvolve<T> smoother;
-    smoother.convolve(input, output);
+int convolve(const std::string& input, const std::string& output) {
+    try {
+        laplacian::Convolution<T> smoother;
+        smoother.convolve(input, output);
+        return EXIT_SUCCESS;
+    } catch (std::exception &e) {
+        std::cerr << "Error: " << e.what() << std::endl;
+        return EXIT_FAILURE;
+    }
+}
+
+bool valid_kernel(const int size) {
+    return size >= 1 && size <= 4;
 }
 
 int main(int argc, char* argv[]) {
@@ -33,16 +42,10 @@ int main(int argc, char* argv[]) {
     opts.add_options()
         ("help", "produce this help message")
         ("version", "print version information")
-        ("input",  po::value<std::string>(), "input file")
-        ("output", po::value<std::string>(), "output file")
-        ("l1", "laplacian scale=1")
-        ("l2", "laplacian scale=2")
-        ("l3", "laplacian scale=3")
-        ("l4", "laplacian scale=4")
-        ("g1", "gaussian sigma=1")
-        ("g2", "gaussian sigma=2")
-        ("g3", "gaussian sigma=3")
-        ("g4", "gaussian sigma=4")
+        ("gaussian,g", po::value<int>(), "gaussian sigma")
+        ("laplacian,l", po::value<int>(), "laplacian scale")
+        ("input,i",  po::value<std::string>(), "input file")
+        ("output,o", po::value<std::string>(), "output file")
         ;
 
     po::positional_options_description positional_opts;
@@ -55,18 +58,19 @@ int main(int argc, char* argv[]) {
     } catch (std::exception &e) {
         std::cerr << "Error: " << e.what() << std::endl;
         usage();
+        return EXIT_FAILURE;
     }
-
 
     if (vm.count("help")){
         usage();
+        return EXIT_SUCCESS;
     }
 
     if (vm.count("version")) {
         std::cerr << std::endl;
         laplacian::print_version_info(std::cerr);
         std::cerr << std::endl;
-        return 0;
+        return EXIT_SUCCESS;
     }
 
     if (vm.count("input")) {
@@ -76,38 +80,43 @@ int main(int argc, char* argv[]) {
         if (vm.count("output")) {
             output = vm["output"].as<std::string>();
         } else {
-            output = "output_" + vm["input"].as<std::string>();
+            output = vm["input"].as<std::string>() + ".out";
             std::cerr << "Using " << output << " as the output file." << std::endl;
         }
 
-        if (vm.count("l1")) {
-            std::cerr << "Using laplacian (scale=1) convolution" << std::endl;
-            convolve<laplacian::kernel::laplace::Scale1>(input, output);
-        } else if (vm.count("l2")) { 
-            std::cerr << "Using laplacian (scale=2) convolution" << std::endl;
-            convolve<laplacian::kernel::laplace::Scale2>(input, output);
-        } else if (vm.count("l3")) {
-            std::cerr << "Using laplacian (scale=3) convolution" << std::endl;
-            convolve<laplacian::kernel::laplace::Scale3>(input, output);
-        } else if (vm.count("l4")) {
-            std::cerr << "Using laplacian (scale=4) convolution" << std::endl;
-            convolve<laplacian::kernel::laplace::Scale4>(input, output);
-        } else if (vm.count("g1")) {
-            std::cerr << "Using gaussian (sigma=1) convolution" << std::endl;
-            convolve<laplacian::kernel::gaussian::Sigma1>(input, output);
-        } else if (vm.count("g2")) {
-            std::cerr << "Using gaussian (sigma=2) convolution" << std::endl;
-            convolve<laplacian::kernel::gaussian::Sigma2>(input, output);
-        } else if (vm.count("g3")) {
-            std::cerr << "Using gaussian (sigma=3) convolution" << std::endl;
-            convolve<laplacian::kernel::gaussian::Sigma3>(input, output);
-        } else if (vm.count("g4")) {
-            std::cerr << "Using gaussian (sigma=4) convolution" << std::endl;
-            convolve<laplacian::kernel::gaussian::Sigma4>(input, output);
+        if (vm.count("laplacian") && valid_kernel(vm["laplacian"].as<int>())) {
+            std::cerr << "Using laplacian (scale=" << vm["laplacian"].as<int>() << ") convolution" << std::endl;
+            switch(vm["laplacian"].as<int>()) {
+                case 1:
+                    return convolve<laplacian::kernel::laplace::Scale1>(input, output);
+                case 2:
+                    return convolve<laplacian::kernel::laplace::Scale2>(input, output);
+                case 3:
+                    return convolve<laplacian::kernel::laplace::Scale3>(input, output);
+                case 4:
+                    return convolve<laplacian::kernel::laplace::Scale4>(input, output);
+            }
+        } else if (vm.count("gaussian") && valid_kernel(vm["gaussian"].as<int>())) {
+            std::cerr << "Using gaussian (sigma=" << vm["gaussian"].as<int>() << ") convolution" << std::endl;
+            switch(vm["gaussian"].as<int>()) {
+                case 1:
+                    return convolve<laplacian::kernel::gaussian::Sigma1>(input, output);
+                case 2:
+                    return convolve<laplacian::kernel::gaussian::Sigma2>(input, output);
+                case 3:
+                    return convolve<laplacian::kernel::gaussian::Sigma3>(input, output);
+                case 4:
+                    return convolve<laplacian::kernel::gaussian::Sigma4>(input, output);
+            }
+        } else {
+            std::cerr << "Invalid algorithm specified!" << std::endl;
+            usage();
+            return EXIT_FAILURE;
         }
     } else {
         std::cerr << "Missing input file" << std::endl;
         usage();
+        return EXIT_FAILURE;
     }
 }
 
