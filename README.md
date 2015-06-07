@@ -10,7 +10,7 @@ that are scale- and rotation-invariant.
  This project requires:
   * Cross-platform Make (CMake) v2.6.2+
   * GNU Make or equivalent.
-  * GCC or an alternative, reasonably conformant C++ compiler.
+  * clang, gcc or an alternative, reasonably conformant C++11 compiler.
   * Boost C++ Libraries v1.46+ [HEADERS and LIBRARIES]
   * libjpeg 8
 
