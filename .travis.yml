@@ -1,5 +1,5 @@
 before_install:
-  - sudo apt-get install -qq libboost-all-dev libjpeg-dev cmake
+  - sudo apt-get install -qq libboost-all-dev libjpeg-dev cmake clang
 language: cpp
 compiler:
   - clang
