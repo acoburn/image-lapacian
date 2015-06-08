@@ -1,0 +1,65 @@
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/!svn/ver/540/trunk/gil_2/boost/gil/extension/opencv
+END
+smooth.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/!svn/ver/540/trunk/gil_2/boost/gil/extension/opencv/smooth.hpp
+END
+drawing.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/!svn/ver/540/trunk/gil_2/boost/gil/extension/opencv/drawing.hpp
+END
+utilities.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/!svn/ver/540/trunk/gil_2/boost/gil/extension/opencv/utilities.hpp
+END
+convert_color.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/!svn/ver/540/trunk/gil_2/boost/gil/extension/opencv/convert_color.hpp
+END
+resize.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/!svn/ver/540/trunk/gil_2/boost/gil/extension/opencv/resize.hpp
+END
+opencv_all.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/!svn/ver/540/trunk/gil_2/boost/gil/extension/opencv/opencv_all.hpp
+END
+edge_detection.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/!svn/ver/540/trunk/gil_2/boost/gil/extension/opencv/edge_detection.hpp
+END
+text.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/!svn/ver/540/trunk/gil_2/boost/gil/extension/opencv/text.hpp
+END
+ipl_image_wrapper.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/!svn/ver/540/trunk/gil_2/boost/gil/extension/opencv/ipl_image_wrapper.hpp
+END
+convert_scale.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/!svn/ver/540/trunk/gil_2/boost/gil/extension/opencv/convert_scale.hpp
+END
