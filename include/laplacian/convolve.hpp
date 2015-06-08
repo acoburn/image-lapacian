@@ -10,7 +10,7 @@ namespace laplacian {
 
     template<class T>
     class Convolution {
-        
+
         public:
             Convolution<T>() {
             }
