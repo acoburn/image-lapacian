@@ -1,5 +1,5 @@
 before_install:
-  - sudo apt-get install -qq libboost-all-dev libjpeg-dev cmake clang libopencv-dev
+  - sudo apt-get install -qq libboost-all-dev libjpeg-dev cmake clang libcv-dev libopencv-dev
 language: cpp
 compiler:
   - clang
