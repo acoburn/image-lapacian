@@ -5,18 +5,50 @@
 
 namespace laplacian {
 
+    boost::gil::rgb8_image_t m_src;
+    
     class Edges {
         public:
-            Edges() { }
+            Edges(const std::string& input) {
+                boost::gil::jpeg_read_image(input, m_src);
+            }
 
-            void edges(const std::string& input, const std::string& output) {
+            void canny(const std::string& output,
+                       double threshold1,
+                       double threshold2) {
 
-                boost::gil::rgb8_image_t src;
-                boost::gil::rgb8_image_t dst(src);
+                boost::gil::rgb8_image_t dst(m_src);
+                
+                boost::gil::opencv::canny(
+                        boost::gil::view(m_src),
+                        boost::gil::view(dst),
+                        threshold1,
+                        threshold2,
+                        boost::gil::opencv::aperture3());
 
-                boost::gil::jpeg_read_image(input, src);
+                boost::gil::jpeg_write_view(output,
+                        boost::gil::view(dst));
+            }
+
+            void laplace(const std::string& output) {
+
+                boost::gil::rgb8_image_t dst(m_src);
+
                 boost::gil::opencv::laplace(
-                        boost::gil::view(src),
+                        boost::gil::view(m_src),
+                        boost::gil::view(dst),
+                        boost::gil::opencv::aperture3());
+
+                boost::gil::jpeg_write_view(output,
+                        boost::gil::view(dst));
+            }
+
+            void sobel(const std::string& output) {
+
+                boost::gil::rgb8_image_t dst(m_src);
+
+                boost::gil::opencv::sobel(
+                        boost::gil::view(m_src),
                         boost::gil::view(dst),
                         boost::gil::opencv::aperture3());
 

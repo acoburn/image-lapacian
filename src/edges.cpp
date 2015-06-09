@@ -77,8 +77,8 @@ int main(int argc, char* argv[]) {
         if (vm.count("laplace")) {
             std::cerr << "Using laplace edge detector" << std::endl;
 
-            laplacian::Edges detector;
-            detector.edges(input, output);
+            laplacian::Edges detector(input);
+            detector.laplace(output);
 
         } else {
             std::cerr << "Invalid algorithm specified!" << std::endl;
