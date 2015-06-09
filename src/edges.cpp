@@ -40,6 +40,8 @@ int main(int argc, char* argv[]) {
         ("help", "produce this help message")
         ("version", "print version information")
         ("laplace,l", "laplacian edge detector")
+        ("canny,c", "canny edge detector")
+        ("sobel,s", "sobel edge detector")
         ("input,i",  po::value<std::string>(), "input file")
         ("output,o", po::value<std::string>(), "output file")
         ;
@@ -74,12 +76,16 @@ int main(int argc, char* argv[]) {
         const std::string input(vm["input"].as<std::string>());
         const std::string output(vm["output"].as<std::string>());
 
+        laplacian::Edges detector(input);
         if (vm.count("laplace")) {
             std::cerr << "Using laplace edge detector" << std::endl;
-
-            laplacian::Edges detector(input);
             detector.laplace(output);
-
+        } else if (vm.count("sobel")) {
+            std::cerr << "Using sobel edge detector" << std::endl;
+            detector.sobel(output);
+        } else if (vm.count("canny")) {
+            std::cerr << "Using canny edge detector" << std::endl;
+            detector.canny(output, 60, 180);
         } else {
             std::cerr << "Invalid algorithm specified!" << std::endl;
             usage();
