@@ -11,7 +11,8 @@ that are scale- and rotation-invariant.
   * Cross-platform Make (CMake) v2.6.2+
   * GNU Make or equivalent.
   * clang, gcc or an alternative, reasonably conformant C++11 compiler.
-  * Boost C++ Libraries v1.46+ [HEADERS and LIBRARIES]
+  * Boost C++ Libraries v1.46+
+  * OpenCV Libraries
   * libjpeg 8
 
 ##BUILDING
