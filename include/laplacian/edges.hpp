@@ -33,9 +33,9 @@ namespace laplacian {
             //for (std::ptrdiff_t x=0; x<src.width(); ++x) {
                 //dstIt[x]=fun(srcIt[x]);
             //}
-        //return fun; 
+        //return fun;
     //}
-    
+
     template <typename SrcView, typename DstView>
     void transform(const SrcView& src, DstView& dst) {
         typedef typename boost::gil::channel_type<DstView>::type dst_channel_t;
@@ -59,14 +59,19 @@ namespace laplacian {
                        double threshold1,
                        double threshold2) {
 
-                boost::gil::rgb8_image_t dst(m_src);
+                boost::gil::rgb8_image_t dst(m_src.dimensions());
+                boost::gil::rgb8_image_t inverted(m_src.dimensions());
 
                 boost::gil::opencv::canny(
                         boost::gil::view(m_src),
                         boost::gil::view(dst),
                         threshold1,
                         threshold2,
-                        boost::gil::opencv::aperture3());
+                        boost::gil::opencv::aperture5());
+
+                laplacian::transform(
+                        boost::gil::view(dst),
+                        boost::gil::view(inverted));
 
                 boost::gil::jpeg_write_view(output,
                         boost::gil::view(dst));
@@ -93,13 +98,17 @@ namespace laplacian {
 
             void sobel(const std::string& output) {
 
-                boost::gil::rgb8_image_t dst(m_src);
-                boost::gil::rgb8_image_t inverted;
+                boost::gil::rgb8_image_t dst(m_src.dimensions());
+                boost::gil::rgb8_image_t inverted(m_src.dimensions());
 
                 boost::gil::opencv::sobel(
                         boost::gil::view(m_src),
                         boost::gil::view(dst),
-                        boost::gil::opencv::aperture3());
+                        boost::gil::opencv::aperture5());
+
+                laplacian::transform(
+                        boost::gil::view(dst),
+                        boost::gil::view(inverted));
 
                 boost::gil::jpeg_write_view(output,
                         boost::gil::view(inverted));
