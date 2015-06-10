@@ -13,16 +13,16 @@ namespace laplacian {
         }
     };
 
-    template <typename Out>
-    struct strengthener {
-        template <typename T> Out operator()(const T& in, const int threshold) const {
-            if (in > threshold) {
-                return 1;
-            } else {
-                return 0;
-            }
-        }
-    };
+    //template <typename Out>
+    //struct strengthener {
+        //template <typename T> Out operator()(const T& in, const int threshold) const {
+            //if (in > threshold) {
+                //return 1;
+            //} else {
+                //return 0;
+            //}
+        //}
+    //};
 
     //template <typename SrcView, typename DstView, typename F>
     //F transform(const SrcView& src const DstView& dst, F fun) {
@@ -42,7 +42,6 @@ namespace laplacian {
         for (int y=0; y < src.height(); ++y) {
             typename SrcView::x_iterator src_it = src.row_begin(y);
             typename DstView::x_iterator dst_it = dst.row_begin(y);
-
             for (int x=0; x < src.width(); ++x) {
                 boost::gil::static_transform(src_it[x], dst_it[x], invert<dst_channel_t>());
             }
@@ -81,7 +80,7 @@ namespace laplacian {
                 boost::gil::opencv::laplace(
                         boost::gil::view(m_src),
                         boost::gil::view(dst),
-                        boost::gil::opencv::aperture3());
+                        boost::gil::opencv::aperture5());
 
                 laplacian::transform(
                         boost::gil::view(dst),
