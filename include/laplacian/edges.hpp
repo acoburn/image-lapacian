@@ -85,7 +85,7 @@ namespace laplacian {
                 boost::gil::opencv::laplace(
                         boost::gil::view(m_src),
                         boost::gil::view(dst),
-                        boost::gil::opencv::aperture5());
+                        boost::gil::opencv::aperture3());
 
                 laplacian::transform(
                         boost::gil::view(dst),
