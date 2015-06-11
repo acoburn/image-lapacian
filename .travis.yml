@@ -10,5 +10,4 @@ install:
   export CC="clang"
 
 script:
-  - cmake ./
-  - make && make test
+  - make && make check
